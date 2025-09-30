@@ -1,0 +1,21 @@
+services:
+
+  envoy:
+    image: envoyproxy/envoy:v1.37.0
+    container_name: envoy
+    ports:
+      - "9901:9901"
+      - "10000:10000"
+    volumes:
+      - ./config/envoy.yaml:/etc/envoy/envoy.yaml
+      - ./bin/rmq-envoy-filter.wasm:/etc/envoy/rmq-envoy-filter.wasm
+    restart: always
+    depends_on:
+      - backend
+    command: ["envoy", "-c", "/etc/envoy/envoy.yaml", "--log-level", "info"]
+
+  backend:
+    image: nginx:alpine
+    container_name: backend
+    ports:
+      - "8080:80"

@@ -1,0 +1,32 @@
+version: '3'
+
+tasks:
+
+  default:
+    desc: List all tasks
+    cmds:
+      - task -l
+
+  build-go:
+    desc: build by go
+    cmds:
+      - rm -f ./bin/rmq-envoy-filter.wasm
+      - >
+        env GOOS=wasip1 GOARCH=wasm
+        go build
+        -buildmode=c-shared
+        -o ./bin/rmq-envoy-filter.wasm
+        ./cmd/rmq-envoy-filter/main.go
+
+  build-tinygo:
+    desc: build by tinygo
+    cmds:
+      - rm -f ./bin/rmq-envoy-filter.wasm
+      - >
+        tinygo build
+        -o ./bin/rmq-envoy-filter.wasm
+        -target=wasi
+        -scheduler=none
+        -opt=z
+        -no-debug
+        ./cmd/rmq-envoy-filter/main.go
