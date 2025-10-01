@@ -35,3 +35,21 @@ func (_ *tcpContext) OnNewConnection() types.Action {
 	proxywasm.LogInfof("new connection...")
 	return types.ActionContinue
 }
+
+func (tc *tcpContext) OnDownstreamData(size int, endStream bool) types.Action {
+	data, err := proxywasm.GetDownstreamData(0, size)
+	if err != nil {
+		proxywasm.LogErrorf("failed to get downstream data: %v", err)
+	}
+	proxywasm.LogInfof("downstream data len: %d", len(data))
+	return types.ActionContinue
+}
+
+func (tc *tcpContext) OnUpstreamData(size int, endStream bool) types.Action {
+	data, err := proxywasm.GetUpstreamData(0, size)
+	if err != nil {
+		proxywasm.LogErrorf("failed to get upstream data: %v", err)
+	}
+	proxywasm.LogInfof("upstream data len: %d", len(data))
+	return types.ActionContinue
+}

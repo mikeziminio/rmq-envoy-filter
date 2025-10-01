@@ -30,3 +30,13 @@ tasks:
         -opt=z
         -no-debug
         ./cmd/rmq-envoy-filter/main.go
+
+  up:
+    desc: docker compose up
+    cmds:
+      - sudo docker compose up -d
+
+  down:
+    desc: docker compose down
+    cmds:
+      - sudo docker compose down --remove-orphans
