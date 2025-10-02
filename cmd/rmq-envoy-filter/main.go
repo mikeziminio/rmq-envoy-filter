@@ -3,6 +3,9 @@ package main
 import (
 	"github.com/proxy-wasm/proxy-wasm-go-sdk/proxywasm"
 	"github.com/proxy-wasm/proxy-wasm-go-sdk/proxywasm/types"
+
+	"github.com/mikeziminio/rmq-envoy-filter/internal/log"
+	"github.com/mikeziminio/rmq-envoy-filter/internal/rmq"
 )
 
 func init() {
@@ -33,6 +36,12 @@ type tcpContext struct {
 
 func (_ *tcpContext) OnNewConnection() types.Action {
 	proxywasm.LogInfof("new connection...")
+
+	parser := rmq.NewRMQParser(log.Logger{
+		Errorf: proxywasm.LogErrorf,
+		Infof:  proxywasm.LogInfof,
+	})
+
 	return types.ActionContinue
 }
 
